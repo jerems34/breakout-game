@@ -5,7 +5,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include "brique.h"
-#define DELAY 30000
+
 Balle::Balle(int _x,int _y,int _velocity,char _b,int _size): x(_x),y(_y),velocity(_velocity),b(_b),size(_size) {}
 
 int Balle::getX()const { return x; }
@@ -20,7 +20,14 @@ void Balle::setVelocity(int i) { velocity=i; }
 void Balle::setChB(char c){ b=c; }
 void Balle::erase(WINDOW *w,int x,int y){
    std::string s(2,' ');
-   mvwprintw(w,y,x,s.c_str());
+   mvwprintw(w,y+2,x,s.c_str());
+  wrefresh(w);
+  refresh();
+  
+     mvwprintw(w,y-2,x,s.c_str());
+  wrefresh(w);
+  refresh();
+ mvwprintw(w,y+1,x,s.c_str());
   wrefresh(w);
   refresh();
 }
@@ -56,68 +63,69 @@ int max_x=100;
 
   
 void Balle::moveBally(WINDOW *w,Raquette &raq,Brique &br ){
-   int direction=1;int max_y=35;
-   int next_y;int ch;int max_x=100;
-     int next_x;
- 
+   int direction=-1;int max_y=35;
+   int next_y;int ch;
+   br.print(w);
     while( (ch = getch())!=' ')
     {
-         
-   
-  
-    werase(w);
-    std::string s(size,b);
-    mvwprintw(w,y,x,s.c_str());
-    raq.print(w);
-   
-    wrefresh(w);
-    refresh();
+      erase(w,x,y);
+      std::string s(size,b);
+      mvwprintw(w,y,x,s.c_str());
+      raq.print(w);
+    
+      wrefresh(w);
+      refresh();
       next_y =y+direction;
-      if((next_y>=max_y || next_y<0)      ){
-    direction*=-1;
-     } else{
-     y+=direction;
-     }
+      if( next_y<0 || next_y>max_y){
+	direction*=-1;
+      } else{
+	y+=direction;
+      }
+      if ((y==raq.getY()-1) && (x>=raq.getX()) && (x<=raq.getX()+raq.getSize())){
+	direction*=-1;
+      }else{
+	y+=direction;
+      }
+
       
         switch (ch) {
-     case 'a':
+     case KEY_LEFT:
 	 
-	raq.erase(w);
-	if(!(raq.getX()-1<0)){
-	 if(     50==raq.getX()-1)
-	    {
-	      direction*=-1;
-	    }else{
-	    y+=direction;
-	  }
-	  
-	  raq.setX(raq.getX()-1);
-	 
-        
-	raq.print(w);
-    	}
+       raq.erase(w);
+       if(!(raq.getX()-1<0)){
+      // 	 if (31<=y){
+      // 	direction*=-1;
+      // }else{
+      // 	y+=direction;
+      // }
+	 raq.setX(raq.getX()-1);
+	 raq.print(w);
+       }
 	break;
-      case 'z':
+      case KEY_RIGHT:
 
 	raq.erase(w);
 	
 	 raq.setX(raq.getX()+1);
 	if(!(raq.getX()+raq.getSize()>97)){
-	  if( 50    ==raq.getX()-1)
-	    {
-	      direction*=-1;
-	    }else{
-	    y+=direction;
-	  }
-	 
+      // 	  if (31<=y){
+      // 	direction*=-1;
+      // }else{
+      // 	y+=direction;
+      // }
 	raq.print(w);
 	}
 	break;
 	
+	if (next_y>=max_y){
+	ch=' ';
+      }
+
+	
     }
   
   }
-     br.print(w);
+   
   }
     
 

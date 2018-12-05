@@ -11,20 +11,21 @@ void Brique::setY(int n){  y=n; }
 void Brique::print(WINDOW *w)const{
   int x;int y;
   std::string b(size,c);
-  for(x=1;x<100;x++){
-    for(y=1;y<20;y++){
-    // int x=rand()%100+1;
-  //  int y=rand()%20+1;
- 
-  wattron(w,COLOR_PAIR(BBLUE));
-  mvwprintw(w,y,x,b.c_str());
-  wattroff(w,COLOR_PAIR(BBLUE));
-  wrefresh(w);
-  refresh();
-  x=x+rand()%5+2;
-  y=y+rand()%3+1;
+  
+  for(x=0;x<100-size;x++){
+    for(y=1;y<20;y=y+2){
+      // int x=rand()%100+1;
+      //  int y=rand()%20+1;
+      
+      wattron(w,COLOR_PAIR(BBLUE));
+      mvwprintw(w,y,x=x+1,b.c_str());
+      wattroff(w,COLOR_PAIR(BBLUE));
+      wrefresh(w);
+      refresh();
+      
+    }
   }
-  }
+
 }
 void Brique::erase(WINDOW *w)const{
   std::string s(size,' ');

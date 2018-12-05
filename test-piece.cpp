@@ -4,7 +4,6 @@
 #include "brique.h"
 #include <stdlib.h>
 #include <unistd.h>
-#define DELAY 3000
 void myprogram(){
   int dir=1;
   int ch;Color c=WRED;
@@ -12,7 +11,7 @@ void myprogram(){
   Window menu(3,30,1,0);
   Window plateau(h,w,1,6);
 
-    Balle ball(h/2,w-3,0,'O',1);
+    Balle ball(h/2,w-3,-1,'O',1);
    Raquette raq(w/2,h-5,8,' ');
    Brique br(10,10,7,' ');
       raq.print(plateau.getwin());
@@ -48,8 +47,8 @@ void myprogram(){
 	break;
 	
       case ' ':
-	  usleep(DELAY);
-	   ball.moveBally(plateau.getwin(),raq,br);	   
+
+	  ball.moveBally(plateau.getwin(),raq,br);	   
      
 	break;
       case KEY_LEFT:
