@@ -4,14 +4,15 @@ EXEC=main
 all: $(EXEC)
 
 main: test-piece.o window.o utilisateur.o balle.o brique.o raquette.o tabBriques.o
-	$(C) $^ -o $@ -lncurses 
+	$(C) $^ -o $@ -lncurses
 
 test-piece.o: test-piece.cpp
 	$(C) -c $<
 
 cellule.o: window.cpp window.h
 	$(C) -c $<
-
+tabBriques.o: tabBriques.h tabBriques.cpp
+	$(C) -c $<
 utilisateur.o: utilisateur.cpp utilisateur.h
 	$(C) -c $<
 
@@ -23,8 +24,7 @@ raquette.o: raquette.cpp raquette.h
 
 brique.o: brique.cpp brique.h
 	$(C) -c $<
-tabBriques.o: tabBriques.cpp tabBriques.h
-	$(c) -c $<
+
 clean:
 	rm -f *.o
 

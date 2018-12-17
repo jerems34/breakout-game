@@ -4,7 +4,7 @@
 
 class Raquette {
  private:
-  
+
   int x,y,size;
   char c;
 

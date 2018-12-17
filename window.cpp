@@ -7,17 +7,17 @@ void init_colors(void)
   init_pair(WBLACK,   COLOR_WHITE, COLOR_BLACK);
   init_pair(WCYAN,    COLOR_WHITE, COLOR_CYAN);
   init_pair(WBLUE,    COLOR_WHITE, COLOR_BLUE);
-  init_pair(WYELLOW,  COLOR_WHITE, COLOR_YELLOW);  
-  init_pair(WGREEN,   COLOR_WHITE, COLOR_GREEN); 
+  init_pair(WYELLOW,  COLOR_WHITE, COLOR_YELLOW);
+  init_pair(WGREEN,   COLOR_WHITE, COLOR_GREEN);
   init_pair(WMAGENTA, COLOR_WHITE, COLOR_MAGENTA);
-  init_pair(WRED,     COLOR_WHITE, COLOR_RED);  
+  init_pair(WRED,     COLOR_WHITE, COLOR_RED);
   init_pair(BWHITE,   COLOR_BLACK, COLOR_WHITE);
   init_pair(BCYAN,    COLOR_BLACK, COLOR_CYAN);
   init_pair(BBLUE,    COLOR_BLACK, COLOR_BLUE);
-  init_pair(BYELLOW,  COLOR_BLACK, COLOR_YELLOW);  
-  init_pair(BGREEN,   COLOR_BLACK, COLOR_GREEN); 
+  init_pair(BYELLOW,  COLOR_BLACK, COLOR_YELLOW);
+  init_pair(BGREEN,   COLOR_BLACK, COLOR_GREEN);
   init_pair(BMAGENTA, COLOR_BLACK, COLOR_MAGENTA);
-  init_pair(BRED,     COLOR_BLACK, COLOR_RED);  
+  init_pair(BRED,     COLOR_BLACK, COLOR_RED);
 }
 
 
@@ -26,14 +26,14 @@ void startProgramX() {
   cbreak();              // pass key presses to program, but not signals
   noecho();              // don't echo key presses to screen
   keypad(stdscr, TRUE);  // allow arrow keys
-  timeout(50);            // no blocking on getch()
+  timeout(0);            // no blocking on getch()
   curs_set(0);           // set the cursor to invisible
   init_colors();
 }
 
 void stopProgramX() {
   refresh();
-  getch();    
+  getch();
   endwin();
 }
 
@@ -67,14 +67,14 @@ Window::~Window(){
   wattroff(win,COLOR_PAIR(colorframe));
   werase(win);
   update();
-  delwin(win); 
+  delwin(win);
 }
 
 void Window::print(int x, int y, std::string s, Color c) const {
   wattron(win,COLOR_PAIR(c));
   mvwprintw(win,y,x,s.c_str());
   wattroff(win,COLOR_PAIR(c));
-  update();  
+  update();
 }
 void Window::print(int x, int y, char s, Color c) const{
   wattron(win,COLOR_PAIR(c));
@@ -84,18 +84,18 @@ void Window::print(int x, int y, char s, Color c) const{
 }
 void Window::print(int x, int y, std::string s) const{
   mvwprintw(win,y,x,s.c_str());
-  update();  
+  update();
 }
 void Window::print(int x, int y, char s) const{
   mvwaddch(win,y,x,s);
-  update();  
+  update();
 }
 
 
-int Window::getX() const { return startx;} 
-int Window::getY() const { return starty;} 
-int Window::getHauteur() const { return height;} 
-int Window::getLargeur() const { return width;}  
+int Window::getX() const { return startx;}
+int Window::getY() const { return starty;}
+int Window::getHauteur() const { return height;}
+int Window::getLargeur() const { return width;}
 Color Window::getCouleurBordure() const{ return colorframe;}
 Color Window::getCouleurFenetre() const{ return colorwin;}
 void Window::setCouleurBordure(Color c){
@@ -108,7 +108,7 @@ void Window::setCouleurFenetre(Color c){
   colorwin=c;
   wattron(win,COLOR_PAIR(colorwin));
   wbkgd(win,COLOR_PAIR(colorwin));
-  update();  
+  update();
 }
 
 void Window::clear() const{  werase(win); update(); }

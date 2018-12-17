@@ -7,7 +7,7 @@ class Brique {
   char c;
 
  public:
-
+Brique();
     Brique(int x,int y,int size,char c);
 
   //Accesseurs
