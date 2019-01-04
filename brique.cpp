@@ -8,21 +8,21 @@ int Brique::getY()const { return y; }
 int Brique::getSize()const{ return size;}
 void Brique::setX(int n){  x=n; }
 void Brique::setY(int n){  y=n; }
-void Brique::print(WINDOW *w)const{
+void Brique::print(WINDOW *w, int x, int y, char c)const{
 
   std::string b(size,c);
 
 
 
-      wattron(w,COLOR_PAIR(BWHITE));
+      wattron(w,COLOR_PAIR(BCYAN));
       mvwprintw(w,y,x,b.c_str());
-      wattroff(w,COLOR_PAIR(BWHITE));
+      wattroff(w,COLOR_PAIR(BCYAN));
       wrefresh(w);
       refresh();
 
     }
 
-void Brique::erase(WINDOW *w)const{
+void Brique::erase(WINDOW *w, int x, int y, char c)const{
   std::string s(size,' ');
   mvwprintw(w,y,x,s.c_str());
   wrefresh(w);

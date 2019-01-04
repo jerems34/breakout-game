@@ -25,5 +25,6 @@ class Raquette {
   void erase(WINDOW *w)const;
   void move();
   void setColors(WINDOW *w,Color c)const;
+  void movRaq(WINDOW *w); 
 };
 #endif

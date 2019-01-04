@@ -2,6 +2,7 @@
 #include "window.h"
 #include <ncurses.h>
 #include <string>
+#include <unistd.h>
 
 Raquette::Raquette(int _x,int _y,int _size,char _c): x(_x),y(_y),size(_size),c(_c) {}
 int Raquette::getX()const { return x; }
@@ -11,7 +12,7 @@ void Raquette::setX(int n){  x=n; }
 void Raquette::setY(int n){  y=n; }
 
 void Raquette::print(WINDOW *w)const{
-
+    init_color(BMAGENTA, 225,206,154);
   std::string raq(size,c);
   wattron(w,COLOR_PAIR(BWHITE));
   mvwprintw(w,y,x,raq.c_str());
@@ -37,4 +38,28 @@ void Raquette::setColors(WINDOW *w,Color c)const{
   wrefresh(w);
   refresh();
 
+}
+
+void Raquette::movRaq(WINDOW *w){
+
+  int ch = getch();
+  int x,y;
+  getmaxyx(w,y,x);
+    switch (ch) {
+      case KEY_LEFT:
+      this->erase(w);
+      if((this->getX()>0)){
+        this->setX(this->getX()-2);
+      }
+      this->print(w);
+      break;
+
+      case KEY_RIGHT:
+      this->erase(w);
+      if((this->getX()+this->getSize()<x-1)){
+        this->setX(this->getX()+2);
+      }
+      this->print(w);
+      break;
+    }
 }

@@ -19,8 +19,8 @@ Brique();
 
   //Méthodes
 
-  void print(WINDOW *w)const;
-  void erase(WINDOW *w)const;
+  void print(WINDOW *w, int x, int y, char c)const;
+  void erase(WINDOW *w, int x, int y, char c)const;
 
 };
 #endif

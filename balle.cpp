@@ -1,19 +1,16 @@
 #include "balle.h"
-#include "raquette.h"
-#include <string>
 #include "window.h"
+#include <string>
 #include <ncurses.h>
 #include <unistd.h>
-#include "brique.h"
-#define DELAY 60000
+#define DELAY 40000
 
-Balle::Balle(int _x,int _y,int _velocity,char _b,int _size, int _nbrbale): x(_x),y(_y),velocity(_velocity),b(_b),size(_size), nbrbale(_nbrbale) {}
+Balle::Balle(int _x,int _y,int _velocity,char _b,int _size): x(_x),y(_y),velocity(_velocity),b(_b),size(_size) {}
 
 int Balle::getX()const { return x; }
 int Balle::getY()const { return y; }
 int Balle::getVelocity()const{ return velocity;}
 int Balle::getChB()const { return b;}
-int Balle::getNbrballe()const{ return nbrbale; }
 int Balle::getDirectionx()const{ return directionx; }
 int Balle::getDirectiony()const{ return directiony; }
 
@@ -21,11 +18,8 @@ void Balle::setX(int i){  x=i; }
 void Balle::setY(int i){  y=i; }
 void Balle::setVelocity(int i) { usleep(i); }
 void Balle::setChB(char c){ b=c; }
-void Balle::setNbrballe(int b){ nbrbale=b; }
 void Balle::setDirectionx(int b){ directionx=b; }
 void Balle::setDirectiony(int a){ directiony=a;}
-
-
 
 void Balle::erase(WINDOW *w,int x,int y){
      std::string s(2,' ');
@@ -64,8 +58,6 @@ void Balle::erase(WINDOW *w,int x,int y){
      refresh();
 
 }
-
-
 void Balle::print(WINDOW *w,int x,int y){
 
  std::string s(size,b);
@@ -76,15 +68,15 @@ void Balle::print(WINDOW *w,int x,int y){
   refresh();
 }
 
-void Balle::moveBally(WINDOW *w,Raquette &raq ){
-   directiony=-1;
+int Balle::moveBally(WINDOW *w,Raquette &raq,Tableaubriques T,Utilisateur &pseudo){
+   directiony=-1;//on initialise les direction à -1 déjà
    directionx=-1;
-   int next_y, ch, max_y=40, next_x, max_x=58;
+   int next_y, ch,  max_y, next_x, max_x;//next_y sert a savoir quelle sera le prochain x et y, et max_y/x c'est la hauteur max de la zone de jeux
+   getmaxyx(w,max_y,max_x);
 
-   
-    while( (ch = getch())!=' ')
+    while( (ch = getch())!='p')
     {
-     
+      usleep(DELAY);
       erase(w,x,y);
      std::string s(size,b);
      mvwprintw(w,y,x,s.c_str());
@@ -92,7 +84,9 @@ void Balle::moveBally(WINDOW *w,Raquette &raq ){
 
       wrefresh(w);
       refresh();
-      //MOUVEMENT + RAQUETTE
+
+
+      //MOUVEMENT
       next_x =x+directionx;
       next_y =y+directiony;
       if(next_y<0){
@@ -111,25 +105,33 @@ void Balle::moveBally(WINDOW *w,Raquette &raq ){
       if(next_x>max_x){
         directionx*=-1;
       }
-      if(next_y > raq.getY()){
-	erase(w,x,y);
-        setNbrballe(nbrbale-1);
+      if(next_y > raq.getY()+2){
+        erase(w,x, y);
         x=raq.getX()+6;
         y=raq.getY()-1;
-	directiony=0;
-	directionx=0;
-	ch=' ';
-	
+        pseudo.setVie(pseudo.getVie()-1);
+        return -1;
+        ch = ' ';
+
+
       }
-      if ((y==raq.getY()) && (x>=raq.getX()+1) && (x<=raq.getX()+raq.getSize()-1)){
+
+      //REBOND RAQUETTE
+      if ((y==raq.getY()) && (x>raq.getX()+2) && (x<=raq.getX()+4)) {
+	       directiony*=-1;
+         	y+=directiony;
+      }
+      if ((y==raq.getY()) && (x>raq.getX()+6) && (x<=raq.getX()+raq.getSize()-2)){
 	       directiony*=-1;
          	y+=directiony;
       }
 
+
+
       //REBOND SUR LES ANGLES
       if ((y==raq.getY()) && (x>=raq.getX()) && (x<=raq.getX()+2)) {
 	       directiony*=-1;
-         directionx*-1;
+         directionx*=-1;
          	y+=directiony;
           x+=directionx;
       }
@@ -139,59 +141,52 @@ void Balle::moveBally(WINDOW *w,Raquette &raq ){
          x+=directionx;
          	y+=directiony;
       }
+
       //REBOND SUR LE MILIEUX
-      if ((y==raq.getY()) && x>=raq.getX()+6 && x<raq.getX()+7){
-        directionx*=1;
+      if ((y==raq.getY()) && x>raq.getX()+4 && x<raq.getX()+6){
+        directionx*=0;
         directiony*=-1;
-        x+=directionx;
         y+=directiony;
+
       }
 
+      //REBOND SUR LES BRIQUES
+      for (int i = 0; i < T.getNbrbrique(); i++) {
+        if(y==T.getBriqueY(i) && (x>=T.getBriqueX(i)) && (x<=T.getBriqueX(i)+9)){
+          pseudo.setS(pseudo.getS()+1);
+          T.briqueerase(i, w, T.getBriqueX(i), T.getBriqueY(i), ' ');
+        	directiony*=-1;
+           	y+=directiony;
+            T.supbrique(i);
+            T.setNbbrique(T.getNbrbrique()-1);
 
-      //BRIQUE
-      // int i=0;
-      // 	if(y==T.getBriqueY(i)-1 && (x>=T.getBriqueX(i)) && (x<=T.getBriqueX(i))){
-      // 	directiony*=-1;
-      // 	T[i].print(w);
-      //    	y+=directiony;
-      // }
-      // if(next_x==T.getBriqueX(i) && next_y==T.getBriqueY(i)+7){
-      //     directionx*=-1;
+        }
+        if(next_x==T.getBriqueX(i)+9 && next_y==T.getBriqueY(i)+7){
+          pseudo.setS(pseudo.getS()+1);
+          T.briqueerase(i, w, T.getBriqueX(i), T.getBriqueY(i), ' ');
 
-      //   }
-      //  if (next_x==T.getBriqueX(i) && next_y==T.getBriqueY(i)){
-      //  	directionx*=-1;
-      //  }
-   
-      
+            directionx*=-1;
+            T.supbrique(i);
+            T.setNbbrique(T.getNbrbrique()-1);
 
-        switch (ch) {
-     case KEY_LEFT:
-       
-       raq.erase(w);
-       if(!(raq.getX()-1<0)){
-         raq.setX(raq.getX()-1);
-       }
-       raq.print(w);
-	break;
-      case KEY_RIGHT:
-	
-	     raq.erase(w);
-       if(!(raq.getX()+raq.getSize()>60-1)){
-        raq.setX(raq.getX()+1);
-       }
-       raq.print(w);
+          }
+         if (next_x==T.getBriqueX(i) && next_y==T.getBriqueY(i)){
+           pseudo.setS(pseudo.getS()+1);
+           T.briqueerase(i, w, T.getBriqueX(i), T.getBriqueY(i), ' ');
 
+         	directionx*=-1;
+          T.supbrique(i);
+          T.setNbbrique(T.getNbrbrique()-1);
+         }
 
-	break;
-
-	if (next_y>=max_y){
-	ch=' ';
       }
 
-
-    }
-
+      raq.movRaq(w);
+      if(T.getNbrbrique()==0){
+        return 1;
+      }
   }
+  return -1;
+
 
   }

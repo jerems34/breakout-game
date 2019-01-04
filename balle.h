@@ -4,11 +4,13 @@
 #include "brique.h"
 #include "raquette.h"
 #include "tabBriques.h"
+#include "utilisateur.h"
+
 class Balle {
  private:
 
   size_t x,y;
-  int velocity, nbrbale=3;
+  int velocity;
   char b;
   int size;
   int directionx, directiony;
@@ -16,7 +18,7 @@ class Balle {
 
  public:
 
-  Balle(int x,int y,int velocity,char b,int size, int nbrbale);
+  Balle(int x,int y,int velocity,char b,int size);
 
   //Acesseurs en lecture
 
@@ -24,7 +26,6 @@ class Balle {
   int getY()const;
   int getVelocity()const;
   int getChB()const;
-  int getNbrballe()const;
   int getDirectionx()const;
   int getDirectiony()const;
 
@@ -34,7 +35,6 @@ class Balle {
   void setY(int i);
   void setVelocity(int i);
   void setChB(char c);
-  void setNbrballe( int b);
   void setDirectionx(int a);
   void setDirectiony(int b);
 
@@ -42,7 +42,7 @@ class Balle {
 
   void print(WINDOW *w,int x,int y);
   void erase(WINDOW *w,int x,int y);
-  void moveBally(WINDOW *win,Raquette &raq);
+  int moveBally(WINDOW *win,Raquette &raq, Tableaubriques T,Utilisateur &pseudo);
   void setColors(WINDOW *w,Color c);
 
 

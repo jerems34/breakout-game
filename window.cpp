@@ -4,7 +4,7 @@
 void init_colors(void)
 {
   start_color();
-  init_pair(WBLACK,   COLOR_WHITE, COLOR_BLACK);
+  init_color(WBLACK, 253,241,184);//
   init_pair(WCYAN,    COLOR_WHITE, COLOR_CYAN);
   init_pair(WBLUE,    COLOR_WHITE, COLOR_BLUE);
   init_pair(WYELLOW,  COLOR_WHITE, COLOR_YELLOW);
@@ -12,12 +12,12 @@ void init_colors(void)
   init_pair(WMAGENTA, COLOR_WHITE, COLOR_MAGENTA);
   init_pair(WRED,     COLOR_WHITE, COLOR_RED);
   init_pair(BWHITE,   COLOR_BLACK, COLOR_WHITE);
-  init_pair(BCYAN,    COLOR_BLACK, COLOR_CYAN);
+  init_pair(BCYAN,    COLOR_BLACK, COLOR_CYAN);//
   init_pair(BBLUE,    COLOR_BLACK, COLOR_BLUE);
   init_pair(BYELLOW,  COLOR_BLACK, COLOR_YELLOW);
   init_pair(BGREEN,   COLOR_BLACK, COLOR_GREEN);
-  init_pair(BMAGENTA, COLOR_BLACK, COLOR_MAGENTA);
   init_pair(BRED,     COLOR_BLACK, COLOR_RED);
+
 }
 
 

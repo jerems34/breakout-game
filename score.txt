@@ -1,0 +1,9 @@
+pseudo = toma
+score = 10
+_____________
+pseudo = Julie
+score = 8
+_____________
+pseudo = Antoine
+score = 7
+_____________

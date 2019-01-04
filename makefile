@@ -3,8 +3,8 @@ EXEC=main
 
 all: $(EXEC)
 
-main: test-piece.o window.o utilisateur.o balle.o brique.o raquette.o tabBriques.o
-	$(C) $^ -o $@ -lncurses 
+main: test-piece.o window.o utilisateur.o balle.o brique.o raquette.o tabBriques.o message.o Bscore.o
+	$(C) $^ -o $@ -lncurses
 
 test-piece.o: test-piece.cpp
 	$(C) -c $<
@@ -23,8 +23,16 @@ raquette.o: raquette.cpp raquette.h
 
 brique.o: brique.cpp brique.h
 	$(C) -c $<
+
 tabBriques.o: tabBriques.cpp tabBriques.h
-	$(c) -c $<
+	$(C) -c $<
+
+message.o: message.cpp message.h
+	$(C) -c $<
+
+Bscore.o: Bscore.cpp Bscore.h
+	$(C) -c $<
+
 clean:
 	rm -f *.o
 
